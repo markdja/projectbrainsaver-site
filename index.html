@@ -1,40 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ProjectBrainsaver</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      font-family: system-ui, sans-serif;
-      background: #111;
-      color: #f8f8f8;
-      text-align: center;
-      padding: 4em 2em;
+      margin: 0;
+      font-family: 'Georgia', serif;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/4/4c/Stained_glass_window.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #f4f4f4;
+      backdrop-filter: blur(5px);
+      padding: 2rem;
     }
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 0.5em;
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-    p {
-      font-size: 1.25em;
-      color: #ccc;
+    h1, h2 {
+      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+      color: #ffd700;
     }
     a {
-      color: #0af;
+      color: #a3e4ff;
       text-decoration: none;
     }
     a:hover {
       text-decoration: underline;
     }
+    .qr-container {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    .qr-container img {
+      width: 150px;
+      height: 150px;
+    }
+    .quote {
+      font-style: italic;
+      color: #ccc;
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
-  <h1>Welcome to ProjectBrainsaver</h1>
-  <p>
-    A space where resonance meets reality.<br>
-    Watch this space evolve.<br><br>
-    <a href="https://github.com/markdja/projectbrainsaver-site">GitHub Source ↗</a>
-  </p>
+  <div class="container">
+    <h1>ProjectBrainsaver</h1>
+    <p>ProjectBrainsaver began in 2003 — not in a boardroom, but in a quiet struggle for clarity, sanity, and the hope that technology might help when everything else breaks down.</p>
+    <p>It wasn’t created for profit or backed by funding. It was created out of necessity, by someone whose life had been shaped by personal crises, system failures, and a deep awareness that there were no adequate tools for people falling between the cracks.</p>
+    <p>In 2012, ProjectBrainsaver became a limited company. Even today, ProjectBrainsaver Limited has no bank account. It remains independent, unaffiliated, and mission-led. Not a startup. A signal.</p>
+    <p class="quote">"When the systems fail, something else has to hold. This is that something."</p>
+    
+    <h2>Explore More</h2>
+    <ul>
+      <li><a href="https://www.crunchbase.com/organization/projectbrainsaver-limited">View Crunchbase Profile</a></li>
+      <li><a href="https://waumtxof.manus.space/index.html">Read the Scroll</a></li>
+      <li><a href="https://resonance.projectbrainsaver.com">Visit Resonance Interface</a></li>
+    </ul>
+
+    <div class="qr-container">
+      <div>
+        <img src="qrcode_waumtxof.manus.space.png" alt="Scroll QR Code" />
+        <p>Scan for the Scroll</p>
+      </div>
+      <div>
+        <img src="qrcode_resonance.projectbrainsaver.com.png" alt="Resonance QR Code" />
+        <p>Scan for Resonance</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
