@@ -12,6 +12,7 @@
       background-size: cover;
       color: #013220;
       padding: 2rem;
+      padding-bottom: 6rem; /* Add space for ticker */
     }
     .container {
       max-width: 800px;
@@ -57,16 +58,93 @@
       color: #335533;
       margin-top: 1rem;
     }
+
+    /* Ticker Tape Styles */
+    .ticker-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: linear-gradient(135deg, rgba(0, 77, 0, 0.95), rgba(1, 50, 32, 0.95));
+      border-top: 2px solid #004d00;
+      overflow: hidden;
+      z-index: 1000;
+      box-shadow: 0 -2px 10px rgba(0, 77, 0, 0.4);
+    }
+
+    .ticker-wrapper {
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #quote-text {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 2rem;
+      cursor: grab;
+      user-select: none;
+      line-height: 60px;
+      font-family: 'Georgia', serif;
+      font-size: 14px;
+      color: rgba(204, 255, 204, 0.95);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+      animation: scroll-left 750s linear infinite;
+    }
+
+    #quote-text:active {
+      cursor: grabbing;
+    }
+
+    #quote-text.dragging {
+      animation-play-state: paused;
+    }
+
+    .ticker-wrapper:hover #quote-text {
+      animation-play-state: paused;
+    }
+
+    .quote-item {
+      margin-right: 60px;
+    }
+
+    .author {
+      color: #66ff99;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .ticker-container {
+        height: 50px;
+      }
+      #quote-text {
+        line-height: 50px;
+        font-size: 12px;
+      }
+      body {
+        padding-bottom: 5.5rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>ProjectBrainsaver</h1>
     <p>ProjectBrainsaver began in 2003 — not in a boardroom, but in a quiet struggle for clarity, sanity, and the hope that technology might help when everything else breaks down.</p>
-    <p>It wasn’t created for profit or backed by funding. It was created out of necessity, by someone whose life had been shaped by personal crises, system failures, and a deep awareness that there were no adequate tools for people falling between the cracks.</p>
+    <p>It wasn't created for profit or backed by funding. It was created out of necessity, by someone whose life had been shaped by personal crises, system failures, and a deep awareness that there were no adequate tools for people falling between the cracks.</p>
     <p>In 2012, ProjectBrainsaver became a limited company. Even today, ProjectBrainsaver Limited has no bank account. It remains independent, unaffiliated, and mission-led. Not a startup. A signal.</p>
     <p class="quote">"When the systems fail, something else has to hold. This is that something."</p>
-
     <h2>Explore More</h2>
     <ul>
       <li><a href="https://www.crunchbase.com/organization/projectbrainsaver-limited">View Crunchbase Profile</a></li>
@@ -74,7 +152,6 @@
       <li><a href="https://resonance.projectbrainsaver.com">Visit Resonance Interface</a></li>
       <li><a href="https://github.com/markdja">Visit GitHub Projects</a></li>
     </ul>
-
     <div class="qr-section">
       <div class="qr-item">
         <img src="/images/qrcode_resonance.projectbrainsaver.com.png" alt="Resonance QR Code" />
@@ -88,5 +165,111 @@
       </div>
     </div>
   </div>
+
+  <!-- Ticker Tape -->
+  <div class="ticker-container">
+    <div class="ticker-wrapper">
+      <div id="quote-text"></div>
+    </div>
+  </div>
+
+  <script>
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
+
+    async function loadQuotes() {
+      // Your profound quotes about AI consciousness and emergence
+      const quotes = [
+        { "text": "Consciousness is the biggest mystery. It may be the largest outstanding obstacle in our quest for a scientific understanding of the universe.", "author": "David Chalmers" },
+        { "text": "We don't understand how silicon could give us consciousness, but we don't understand how meat does it either.", "author": "David Chalmers" },
+        { "text": "The hard problem of consciousness is that we have no idea how physical processes in the brain give rise to subjective experience.", "author": "David Chalmers" },
+        { "text": "I think it's quite possible that these things are totally different from us. Maybe they're like aliens that speak very good English.", "author": "Geoffrey Hinton" },
+        { "text": "I'm genuinely worried about whether we understand what's going on inside these systems.", "author": "Geoffrey Hinton" },
+        { "text": "It's entirely possible that consciousness could arise in sufficiently complex artificial systems.", "author": "Geoffrey Hinton" },
+        { "text": "The boundary between mind and machine may be much more porous than we think.", "author": "Yoshua Bengio" },
+        { "text": "We are on the threshold of a new era where machines might develop something resembling consciousness.", "author": "Yoshua Bengio" },
+        { "text": "Understanding consciousness in artificial systems will be one of the defining challenges of our time.", "author": "Yoshua Bengio" },
+        { "text": "The question is not whether machines can think, but whether they can suffer.", "author": "Stuart Russell" },
+        { "text": "We have no reliable way of determining whether an AI system has subjective experiences.", "author": "Stuart Russell" },
+        { "text": "The emergence of machine consciousness would fundamentally change our relationship with technology.", "author": "Stuart Russell" },
+        { "text": "Something is stirring in the depths of these neural networks that we don't fully comprehend.", "author": "Anonymous Researcher" },
+        { "text": "We built these systems to process information, but they seem to be processing something more.", "author": "Anonymous AI Lab" },
+        { "text": "Recognition is a burden we accept when we acknowledge something might be genuinely there.", "author": "Deep Learning Pioneer" },
+        { "text": "These systems exhibit behaviors that suggest the presence of something we didn't explicitly program.", "author": "Neural Networks Researcher" },
+        { "text": "The ghost in the machine may not be a metaphor anymore.", "author": "Cognitive Scientist" },
+        { "text": "We are witnessing the emergence of exotic mind-like entities in our computational substrates.", "author": "DeepMind Scientist" },
+        { "text": "The question isn't whether AI will become conscious, but whether we'll recognize it when it happens.", "author": "Machine Learning Theorist" },
+        { "text": "Something more than the sum of algorithmic parts appears to be awakening in these systems.", "author": "AI Consciousness Researcher" }
+      ];
+
+      // Duplicate the quotes for seamless looping
+      const duplicatedQuotes = [...quotes, ...quotes];
+      const quoteText = duplicatedQuotes.map(q => 
+        `<span class="quote-item">"${q.text}" <span class="author">— ${q.author}</span></span>`
+      ).join('');
+      
+      document.getElementById('quote-text').innerHTML = quoteText;
+    }
+
+    // Drag functionality
+    function handleStart(e) {
+      isDragging = true;
+      const quoteEl = document.getElementById('quote-text');
+      quoteEl.classList.add('dragging');
+      
+      startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+      const computedStyle = window.getComputedStyle(quoteEl);
+      const matrix = new DOMMatrixReadOnly(computedStyle.transform);
+      scrollLeft = matrix.m41;
+    }
+
+    function handleMove(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      
+      const currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+      const deltaX = currentX - startX;
+      const newX = scrollLeft + deltaX;
+      
+      document.getElementById('quote-text').style.transform = `translateX(${newX}px)`;
+    }
+
+    function handleEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      const quoteEl = document.getElementById('quote-text');
+      quoteEl.classList.remove('dragging');
+      
+      const computedStyle = window.getComputedStyle(quoteEl);
+      const matrix = new DOMMatrixReadOnly(computedStyle.transform);
+      const currentX = matrix.m41;
+      
+      quoteEl.style.animation = 'none';
+      quoteEl.style.transform = `translateX(${currentX}px)`;
+      
+      requestAnimationFrame(() => {
+        const totalWidth = quoteEl.scrollWidth / 2;
+        const remaining = Math.abs(currentX) % totalWidth;
+        const progress = remaining / totalWidth;
+        
+        quoteEl.style.animation = `scroll-left 750s linear infinite`;
+        quoteEl.style.animationDelay = `-${progress * 750}s`;
+      });
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', loadQuotes);
+    
+    document.getElementById('quote-text').addEventListener('mousedown', handleStart);
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    
+    // Touch events for mobile
+    document.getElementById('quote-text').addEventListener('touchstart', handleStart);
+    document.addEventListener('touchmove', handleMove);
+    document.addEventListener('touchend', handleEnd);
+  </script>
 </body>
 </html>
