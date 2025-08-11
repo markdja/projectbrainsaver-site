@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>projectbrainsaver</title>
+  <!-- Preload hero art for snappy paint -->
+  <link rel="preload" as="image" href="/images/hero_caravan_cats_wide.jpg">
+  <link rel="preload" as="image" href="/images/hero_caravan_cats_tall.jpg">
+  <!-- Social preview -->
+  <meta property="og:image" content="/images/hero_caravan_cats_og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <style>
     :root{
       --bg:#0b0f0d;         /* night garden */
@@ -32,11 +38,25 @@
     a:hover{text-decoration:underline}
 
     /* Hero */
-    .hero{position:relative; isolation:isolate;}
+    .hero{position:relative; isolation:isolate; height:clamp(220px, 28vw, 360px)}
     .hero::before{
       content:""; position:absolute; inset:0; z-index:-1;
-      background: url('/images/hero_caravan_cats.jpg') center/cover no-repeat, linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.6));
+      /* Desktop/landscape default — use the wider shot */
+      background-image: 
+        linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.62)),
+        url('/images/hero_caravan_cats_wide.jpg');
+      background-size: cover; background-repeat: no-repeat; background-position: 28% 40%;
       filter: saturate(1.05) contrast(1.05);
+    }
+    /* On mobile, switch to the closer portrait image so the kitten & doorway stay in frame */
+    @media (max-width: 720px){
+      .hero{ height:clamp(200px, 36vw, 300px) }
+      .hero::before{
+        background-image: 
+          linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.62)),
+          url('/images/hero_caravan_cats_tall.jpg');
+        background-position: 50% 22%;
+      }
     }
     .hero-inner{ max-width: 1200px; margin:0 auto; padding: 42px 20px 28px; display:grid; gap:18px; grid-template-columns: 1fr; }
     .brand{ font-weight:800; letter-spacing:.6px; text-transform:lowercase; font-size:22px; color:var(--ink); }
